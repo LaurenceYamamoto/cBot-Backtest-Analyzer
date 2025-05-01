@@ -1,0 +1,102 @@
+# .NET向けのgitignore
+
+## ビルド結果
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/*
+!*.zip
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]uild/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+## Visual Studio一時ファイル
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+## NuGetパッケージ
+*.nupkg
+# NuGetシンボルパッケージ
+*.snupkg
+# パッケージフォルダ（NuGetのパッケージ復元を有効にすることで無視できる）
+**/[Pp]ackages/*
+# 除外: プロジェクトに含める必要のある特定のパッケージ
+!**/[Pp]ackages/build/
+# 除外: NuGetのv3のプロジェクト固有のフォルダ
+!**/[Pp]ackages/repositories.config
+# NuGet v3のプロジェクト固有ファイル
+*.nuget.props
+*.nuget.targets
+
+## 実行時に生成されるファイル
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+## TeamCity
+_TeamCity*
+
+## DotCover
+*.dotCover
+
+## VisualStudio code coverage結果
+*.coverage
+*.coveragexml
+
+## NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+## その他の一般的な除外パターン
+*.swp
+*.*~
+.DS_Store
+Thumbs.db 

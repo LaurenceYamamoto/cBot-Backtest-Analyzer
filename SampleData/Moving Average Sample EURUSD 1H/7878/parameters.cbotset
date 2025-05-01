@@ -1,0 +1,18 @@
+{
+  "Chart": {
+    "Symbol": "EURUSD",
+    "Period": "h1"
+  },
+  "Parameters": {
+    "FastMaSource": "Close",
+    "FastMaPeriod": "60",
+    "FastMaType": "0",
+    "SlowMaSource": "Close",
+    "SlowMaPeriod": "120",
+    "SlowMaType": "1",
+    "VolumeInLots": "0.01",
+    "StopLossInPips": "90",
+    "TakeProfitInPips": "60",
+    "Label": "MovingAverageSample"
+  }
+}

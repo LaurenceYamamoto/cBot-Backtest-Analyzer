@@ -1,0 +1,184 @@
+﻿<Window x:Class="cBotBacktestAnalyzer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:cBotBacktestAnalyzer"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        mc:Ignorable="d"
+        Title="cBOT Backtest Analyzer" Height="800" Width="1200"
+        MinHeight="600" MinWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Top bar with file selection -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <Button x:Name="LoadFileButton" Content="Open Backtest File" Click="LoadFileButton_Click" Width="150" Height="30" Margin="0,0,10,0"/>
+            <TextBlock x:Name="FilePathTextBlock" VerticalAlignment="Center" Text="No file selected" TextWrapping="Wrap" MaxWidth="1000"/>
+        </StackPanel>
+        
+        <!-- Aggregation method selection -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,5">
+            <TextBlock Text="Aggregation Method:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <RadioButton x:Name="MeanRadioButton" Content="Mean" IsChecked="True" Margin="0,0,10,0" Checked="AggregationMethod_Changed"/>
+            <RadioButton x:Name="MedianRadioButton" Content="Median" Margin="0,0,10,0" Checked="AggregationMethod_Changed"/>
+        </StackPanel>
+        
+        <!-- Main content area with tabs -->
+        <TabControl Grid.Row="2" Margin="10">
+            <!-- Parameter Analysis Tab -->
+            <TabItem Header="Parameter Analysis">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250" MinWidth="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- フィルターエリア -->
+                        <Expander Grid.Row="0" Header="Filter Settings" IsExpanded="False" Margin="0,0,10,10">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="300">
+                                <StackPanel x:Name="ParameterFilterPanel" Margin="5">
+                                    <!-- フィルターUIがここに動的に追加されます -->
+                                    <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                                        <Button x:Name="ApplyParameterFilterButton" Content="Apply Filter" Click="ApplyParameterFilterButton_Click" 
+                                                Width="120" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+                                        <Button x:Name="ResetParameterFilterButton" Content="Reset Filter" Click="ResetParameterFilterButton_Click" 
+                                                Width="120" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Expander>
+                        
+                        <!-- Parameters list -->
+                        <ListBox x:Name="ParameterListBox" Grid.Row="1" Margin="0,0,10,0" SelectionChanged="ParameterListBox_SelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ParameterName}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                    
+                    <!-- Charts area with scrolling -->
+                    <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="ChartsPanel">
+                            <!-- Charts will be added here dynamically -->
+                            <!-- First two default charts -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="300"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="Bold" Margin="0,0,0,5" Text="Net Profit Average" TextWrapping="Wrap"/>
+                                <lvc:CartesianChart Grid.Row="1" x:Name="NetProfitChart" Height="300"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="300"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="Bold" Margin="0,0,0,5" Text="Max Balance Drawdown (%) Average" TextWrapping="Wrap"/>
+                                <lvc:CartesianChart Grid.Row="1" x:Name="DrawdownChart" Height="300"/>
+                            </Grid>
+                            
+                            <!-- Additional metrics will be added here -->
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            
+            <!-- Heat Map Tab -->
+            <TabItem Header="Heat Map Analysis">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Parameter selection -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*" MinWidth="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*" MinWidth="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0" Text="Parameter 1:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox Grid.Column="1" x:Name="Parameter1ComboBox" Margin="0,0,10,0"/>
+                        
+                        <TextBlock Grid.Column="2" Text="Parameter 2:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox Grid.Column="3" x:Name="Parameter2ComboBox" Margin="0,0,10,0"/>
+                        
+                        <Button Grid.Column="4" x:Name="GenerateHeatMapButton" Content="Generate Heat Map" Click="GenerateHeatMapButton_Click" Width="120"/>
+                    </Grid>
+                    
+                    <!-- Filter section -->
+                    <Expander Grid.Row="1" Header="Filter Settings" IsExpanded="False" Margin="0,0,0,10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                            <StackPanel x:Name="HeatMapFilterPanel" Margin="5">
+                                <!-- フィルターUIがここに動的に追加されます -->
+                                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                                    <Button x:Name="ApplyHeatMapFilterButton" Content="Apply Filter" Click="ApplyHeatMapFilterButton_Click" 
+                                            Width="120" HorizontalAlignment="Left" Margin="0,0,0,5"/>
+                                    <Button x:Name="ResetHeatMapFilterButton" Content="Reset Filter" Click="ResetHeatMapFilterButton_Click" 
+                                            Width="120" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Expander>
+                    
+                    <!-- Heat Map content -->
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="HeatMapPanel">
+                            <!-- ヒートマップが動的に追加されます -->
+                            
+                            <!-- Net Profit Heat Map -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="Bold" Margin="0,0,0,5" Text="Net Profit Heat Map" TextWrapping="Wrap"/>
+                                <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                        <Canvas x:Name="NetProfitHeatMapCanvas" ClipToBounds="True" Background="White"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                            
+                            <!-- Max Balance Drawdown Heat Map -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" FontWeight="Bold" Margin="0,10,0,5" Text="Max Balance Drawdown (%) Heat Map" TextWrapping="Wrap"/>
+                                <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1">
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                        <Canvas x:Name="DrawdownHeatMapCanvas" ClipToBounds="True" Background="White"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Grid>
+                            
+                            <!-- 他のヒートマップがここに追加されます -->
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
